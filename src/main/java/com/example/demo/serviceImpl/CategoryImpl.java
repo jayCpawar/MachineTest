@@ -25,6 +25,12 @@ public class CategoryImpl implements CategoryService {
                 .orElseThrow(() -> new RuntimeException("Category not found"));
     }
 
+	 @Override
+	 public void deleteCategory(Long id) {
+		 categoryRepository.deleteById(id);
+	 }
+	 
+	 
     @Override
     public Page<CategoryEntity> getAllCategories(Pageable pageable) {
         return categoryRepository.findAll(pageable);
@@ -38,10 +44,6 @@ public class CategoryImpl implements CategoryService {
         return categoryRepository.save(existingCategory);
     }
 
-    @Override
-    public void deleteCategory(Long id) {
-        categoryRepository.deleteById(id);
-    }
 
 	
 	

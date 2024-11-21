@@ -20,10 +20,6 @@ public class ProductImpl implements ProductService {
 	  @Autowired
 	    private CategoryService categoryService;
 	    
-	 @Override
-	  public Page<ProductEntity> getAllProducts(Pageable pageable) {
-	        return productRepository.findAll(pageable);
-	    }
 
 	 @Override
 	    public ProductEntity getProductById(Long id) {
@@ -39,20 +35,31 @@ public class ProductImpl implements ProductService {
 	    }
 
 	 @Override
-	    public ProductEntity updateProduct(Long id, ProductEntity updatedProduct) {
-	    	ProductEntity existingProduct = getProductById(id);
-	        existingProduct.setName(updatedProduct.getName());
-	        existingProduct.setPrice(updatedProduct.getPrice());
-	        
-	   
-	        System.out.println(categoryService.getCategoryById(updatedProduct.getCategoryEntity().getId()) );
-	        existingProduct.setCategoryEntity(categoryService.getCategoryById(updatedProduct.getCategoryEntity().getId()));
-	       
-	        return productRepository.save(existingProduct);
-	    }
+	 public void deleteProduct(Long id) {
+		 productRepository.deleteById(id);
+	 }
+	 
+	 
+	 @Override
+	 public ProductEntity updateProduct(Long id, ProductEntity updatedProduct) {
+	     ProductEntity existingProduct = getProductById(id);
+
+	     // Update name and price
+	     existingProduct.setName(updatedProduct.getName());
+	     existingProduct.setPrice(updatedProduct.getPrice());
+
+	     if(updatedProduct.getCategoryEntity()== null) {
+	    	 
+	    	 updatedProduct.setCategoryEntity(existingProduct.getCategoryEntity());
+	     }
+	     CategoryEntity category = categoryService.getCategoryById(updatedProduct.getCategoryEntity().getId());
+         existingProduct.setCategoryEntity(category);
+	     return productRepository.save(existingProduct);
+	 }
 
 	 @Override
-	    public void deleteProduct(Long id) {
-	        productRepository.deleteById(id);
-	    }
+	 public Page<ProductEntity> getAllProducts(Pageable pageable) {
+		 return productRepository.findAll(pageable);
+	 }
+
 }

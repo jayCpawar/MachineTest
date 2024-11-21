@@ -29,15 +29,21 @@ public class CategoryController {
         return categoryService.createCategory(CategoryEntity);
     }
 	
+	@DeleteMapping("/{id}")
+	public void deleteCategory(@PathVariable Long id) {
+		categoryService.deleteCategory(id);
+	}
+	
+	@GetMapping("/{id}")
+	public CategoryEntity getCategoryById(@PathVariable Long id) {
+		return categoryService.getCategoryById(id);
+	}
+	
 	 @GetMapping
 	    public Page<CategoryEntity> getAllCategories(@RequestParam(defaultValue = "0") int page) {
 	        return categoryService.getAllCategories(PageRequest.of(page, 10));
 	    }
 
-	    @GetMapping("/{id}")
-	    public CategoryEntity getCategoryById(@PathVariable Long id) {
-	        return categoryService.getCategoryById(id);
-	    }
 
 	    
 
@@ -46,8 +52,4 @@ public class CategoryController {
 	        return categoryService.updateCategory(id, updatedCategory);
 	    }
 
-	    @DeleteMapping("/{id}")
-	    public void deleteCategory(@PathVariable Long id) {
-	        categoryService.deleteCategory(id);
-	    }
 }
